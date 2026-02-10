@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5 WHYs - Interactive Education Tool</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background-color: #f9fafb;
+      min-height: 100vh;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mt-2 { margin-top: 0.5rem; }
+    .mt-4 { margin-top: 1rem; }
+    .mt-16 { margin-top: 4rem; }
+    .my-4 { margin-top: 1rem; margin-bottom: 1rem; }
+
+    :root {
+      --theme-50: hsl(210, 100%, 75%);
+      --theme-100: hsl(212, 100%, 65%);
+      --theme-200: hsl(214, 95%, 55%);
+      --theme-300: hsl(216, 90%, 48%);
+      --theme-400: hsl(218, 85%, 42%);
+      --theme-500: hsl(220, 80%, 36%);
+      --theme-600: hsl(222, 75%, 30%);
+      --theme-700: hsl(224, 70%, 24%);
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--theme-500);
+      margin-bottom: 1rem;
+    }
+
+    .divider {
+      width: 6rem;
+      height: 0.25rem;
+      background-color: var(--theme-500);
+      margin: 0 auto;
+      border-radius: 9999px;
+    }
+
+    h2 {
+      font-size: 1.875rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .description {
+      font-size: 1.125rem;
+      color: #374151;
+      max-width: 48rem;
+      margin: 0 auto;
+    }
+
+    .tab-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      background-color: var(--theme-500);
+      color: white;
+      font-weight: bold;
+      padding: 1rem;
+      width: 10rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    }
+
+    .tab-btn:hover, .tab-btn.active {
+      background-color: var(--theme-600);
+    }
+
+    .pyramid-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .why-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    .why-btn {
+      color: white;
+      font-weight: bold;
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .why-btn.expanded {
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .why-content {
+      border-radius: 0 0 0.5rem 0.5rem;
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .why-content p {
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+
+    .why-content .question {
+      font-weight: 600;
+    }
+
+    .problem-text {
+      font-size: 1.125rem;
+      color: #dc2626;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .root-cause-text {
+      font-size: 1.125rem;
+      color: #60a5fa;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .caption-text {
+      font-size: 1rem;
+      color: #4b5563;
+      margin-top: 1rem;
+      max-width: 36rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .ellipsis {
+      font-size: 2.25rem;
+      color: #4b5563;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .branched-container {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      align-items: flex-start;
+    }
+
+    .limitations-list {
+      max-width: 48rem;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .limitations-list ul {
+      list-style: disc inside;
+      padding: 0;
+      margin: 0;
+    }
+
+    .limitations-list li {
+      font-size: 1.125rem;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="text-center mb-8">
+      <h1>5 WHYS</h1>
+      <div class="divider"></div>
+    </div>
+
+    <div class="text-center mb-8">
+      <h2>What are they?</h2>
+      <p class="description">
+        5 Whys is a technique used to clarify the root causes of an issue. It involves asking "Why?" five times to the previous "Why". Depending on problem's complexity, more or less than 5 whys may need to be asked.
+      </p>
+    </div>
+
+    <div class="text-center mb-8">
+      <h2>5 Whys Examples</h2>
+      <p class="description mb-4" style="margin-bottom: 2rem;">
+        Let us explore how the 5 Whys are applied, and how problems of different complexity lead to differing results.
+      </p>
+      
+      <div class="tab-container">
+        <button class="tab-btn active" onclick="showExample('5whys')">5 WHYs</button>
+        <button class="tab-btn" onclick="showExample('simple')">Simple WHYs</button>
+        <button class="tab-btn" onclick="showExample('complex')">Complex WHYs</button>
+        <button class="tab-btn" onclick="showExample('branched')">Branched WHYs</button>
+      </div>
+
+      <div id="5whys-example" class="pyramid-container">
+        <p class="problem-text"><strong>Problem:</strong> A small electric motor keeps overheating.</p>
+        <div class="why-item">
+          <button class="why-btn" style="width: 32rem; background-color: var(--theme-600);" onclick="toggleWhy(this)">WHY 1</button>
+          <div class="why-content hidden" style="width: 32rem; background-color: var(--theme-500);">
+            <p class="question">Why is the motor overheating?</p>
+            <p>Because the motor is working harder than it was designed to.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 27.5rem; background-color: var(--theme-500);" onclick="toggleWhy(this)">WHY 2</button>
+          <div class="why-content hidden" style="width: 27.5rem; background-color: var(--theme-400);">
+            <p class="question">Why is it working too hard?</p>
+            <p>Because the fan it drives is clogged with dust, adding extra resistance.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 23rem; background-color: var(--theme-400);" onclick="toggleWhy(this)">WHY 3</button>
+          <div class="why-content hidden" style="width: 23rem; background-color: var(--theme-300);">
+            <p class="question">Why is the fan clogged with dust?</p>
+            <p>Because it hasn't been cleaned or inspected for a long time.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 18.5rem; background-color: var(--theme-300);" onclick="toggleWhy(this)">WHY 4</button>
+          <div class="why-content hidden" style="width: 18.5rem; background-color: var(--theme-200);">
+            <p class="question">Why wasn't it cleaned or inspected?</p>
+            <p>Because there's no maintenance schedule in place for small auxiliary equipment.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 14rem; background-color: var(--theme-200);" onclick="toggleWhy(this)">WHY 5</button>
+          <div class="why-content hidden" style="width: 14rem; background-color: var(--theme-100);">
+            <p class="question">Why is there no maintenance schedule?</p>
+            <p>Because small equipment was overlooked when creating maintenance protocols.</p>
+          </div>
+        </div>
+        <p class="root-cause-text"><strong>Root Cause:</strong> There's no maintenance schedule in place for small auxiliary equipment.</p>
+        <p class="caption-text">The 5 WHYs example is the namesake for the 5 WHYs technique. It highlights how a root cause is identified through asking WHY five times.</p>
+      </div>
+
+      <div id="simple-example" class="pyramid-container hidden">
+        <p class="problem-text"><strong>Problem:</strong> The car stopped on the highway.</p>
+        <div class="why-item">
+          <button class="why-btn" style="width: 32rem; background-color: var(--theme-500);" onclick="toggleWhy(this)">WHY 1</button>
+          <div class="why-content hidden" style="width: 32rem; background-color: var(--theme-400);">
+            <p class="question">Why did the car stop?</p>
+            <p>Because it ran out of fuel.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 27.5rem; background-color: var(--theme-400);" onclick="toggleWhy(this)">WHY 2</button>
+          <div class="why-content hidden" style="width: 27.5rem; background-color: var(--theme-300);">
+            <p class="question">Why did it run out of fuel?</p>
+            <p>Because I didn't fill up the tank.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 23rem; background-color: var(--theme-300);" onclick="toggleWhy(this)">WHY 3</button>
+          <div class="why-content hidden" style="width: 23rem; background-color: var(--theme-200);">
+            <p class="question">Why didn't you fill up the tank?</p>
+            <p>Because I forgot to check the fuel gauge before leaving.</p>
+          </div>
+        </div>
+        <p class="root-cause-text"><strong>Root Cause:</strong> I forgot to check the fuel gauge before leaving.</p>
+        <p class="caption-text">For simpler problems, a root cause will be found through FEWER whys.</p>
+      </div>
+
+      <div id="complex-example" class="pyramid-container hidden">
+        <p class="problem-text"><strong>Problem:</strong> A product fails quality inspection.</p>
+        <div class="why-item">
+          <button class="why-btn" style="width: 32rem; background-color: var(--theme-600);" onclick="toggleWhy(this)">WHY 1</button>
+          <div class="why-content hidden" style="width: 32rem; background-color: var(--theme-500);">
+            <p class="question">Why did the product fail quality inspection?</p>
+            <p>Because there were surface defects on the component.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 27.5rem; background-color: var(--theme-500);" onclick="toggleWhy(this)">WHY 2</button>
+          <div class="why-content hidden" style="width: 27.5rem; background-color: var(--theme-400);">
+            <p class="question">Why were there surface defects?</p>
+            <p>Because the molding temperature was inconsistent.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 23rem; background-color: var(--theme-400);" onclick="toggleWhy(this)">WHY 3</button>
+          <div class="why-content hidden" style="width: 23rem; background-color: var(--theme-300);">
+            <p class="question">Why was the temperature inconsistent?</p>
+            <p>Because the heating element was malfunctioning.</p>
+          </div>
+        </div>
+        <p class="ellipsis">...</p>
+        <div class="why-item">
+          <button class="why-btn" style="width: 14rem; background-color: var(--theme-300);" onclick="toggleWhy(this)">WHY 8</button>
+          <div class="why-content hidden" style="width: 14rem; background-color: var(--theme-200);">
+            <p class="question">Why was the schedule not followed?</p>
+            <p>Because maintenance records were not being tracked properly.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 9.5rem; background-color: var(--theme-200);" onclick="toggleWhy(this)">WHY 9</button>
+          <div class="why-content hidden" style="width: 9.5rem; background-color: var(--theme-100);">
+            <p class="question">Why weren't records tracked properly?</p>
+            <p>Because the tracking system was outdated and difficult to use.</p>
+          </div>
+        </div>
+        <p class="root-cause-text"><strong>Root Cause:</strong> The tracking system was outdated and difficult to use.</p>
+        <p class="caption-text">For complex problems, MORE whys must be asked to reach a root cause. Often, there may be multiple.</p>
+      </div>
+
+      <div id="branched-example" class="pyramid-container hidden">
+        <p class="problem-text"><strong>Problem:</strong> A project missed its deadline.</p>
+        <div class="why-item">
+          <button class="why-btn" style="width: 32rem; background-color: var(--theme-500);" onclick="toggleWhy(this)">WHY 1</button>
+          <div class="why-content hidden" style="width: 32rem; background-color: var(--theme-400);">
+            <p class="question">Why did the project miss its deadline?</p>
+            <p>Because key tasks were delayed.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 27.5rem; background-color: var(--theme-400);" onclick="toggleWhy(this)">WHY 2</button>
+          <div class="why-content hidden" style="width: 27.5rem; background-color: var(--theme-300);">
+            <p class="question">Why were key tasks delayed?</p>
+            <p>Because resources were unavailable.</p>
+          </div>
+        </div>
+        <div class="why-item">
+          <button class="why-btn" style="width: 23rem; background-color: var(--theme-300);" onclick="toggleWhy(this)">WHY 3</button>
+          <div class="why-content hidden" style="width: 23rem; background-color: var(--theme-200);">
+            <p class="question">Why were resources unavailable?</p>
+            <p>Because of competing priorities and understaffing.</p>
+          </div>
+        </div>
+        <div class="branched-container">
+          <div class="why-item">
+            <button class="why-btn" style="width: 9rem; background-color: var(--theme-200);" onclick="toggleWhy(this)">WHY 4i</button>
+            <div class="why-content hidden" style="width: 9rem; height: 220px; background-color: var(--theme-100);">
+              <p class="question" style="font-size: 0.875rem;">Why were there competing priorities? (Branch I)</p>
+              <p style="font-size: 0.875rem;">Because project planning didn't account for other ongoing work.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <button class="why-btn" style="width: 9rem; background-color: var(--theme-200);" onclick="toggleWhy(this)">WHY 4ii</button>
+            <div class="why-content hidden" style="width: 9rem; height: 220px; background-color: var(--theme-100);">
+              <p class="question" style="font-size: 0.875rem;">Why was there understaffing? (Branch II)</p>
+              <p style="font-size: 0.875rem;">Because hiring was frozen due to budget constraints.</p>
+            </div>
+          </div>
+        </div>
+        <p class="root-cause-text"><strong>Root Causes:</strong> Poor project planning and budget constraints causing understaffing.</p>
+        <p class="caption-text">When a problem has multiple root causes. For many problems, this will be the case.</p>
+      </div>
+    </div>
+
+    <div class="text-center mb-8" style="margin-top: 4rem;">
+      <h2>The Limitations of 5 Whys</h2>
+      <p class="description mb-4">
+        Whilst the 5 Whys tool can be helpful, it faces several limitations. It is vital that this technique is applied where appropriate. It is not an all-encompassing tool, but it can be useful for identifying root causes in many situations.
+      </p>
+      <div class="limitations-list">
+        <p class="description mb-6" style="font-weight: bold;">The Limitations of 5 Whys include:</p>
+        <ul>
+          <li>Possibility to identify symptoms whilst failing to establish root causes.</li>
+          <li>An investigator being unable to identify causes they don't know/understand.</li>
+          <li>Results aren't repeatable, and different individuals may think of different causes.</li>
+          <li>Potential to neglect other causes where multiple are present.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showExample(example) {
+      document.getElementById('5whys-example').classList.add('hidden');
+      document.getElementById('simple-example').classList.add('hidden');
+      document.getElementById('complex-example').classList.add('hidden');
+      document.getElementById('branched-example').classList.add('hidden');
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById(example + '-example').classList.remove('hidden');
+      
+      event.target.classList.add('active');
+      
+      document.querySelectorAll('.why-content').forEach(content => content.classList.add('hidden'));
+      document.querySelectorAll('.why-btn').forEach(btn => btn.classList.remove('expanded'));
+    }
+
+    function toggleWhy(button) {
+      const content = button.nextElementSibling;
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        button.classList.add('expanded');
+      } else {
+        content.classList.add('hidden');
+        button.classList.remove('expanded');
+      }
+    }
+  </script>
+</body>
+</html>
